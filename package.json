@@ -1,0 +1,69 @@
+{
+  "_from": "git+https://github.com/xuanloi1408/rn-background-geolocation.git",
+  "_id": "@mauron85/react-native-background-geolocation@0.6.3",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/@mauron85/react-native-background-geolocation",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "@mauron85/react-native-background-geolocation@git+https://github.com/xuanloi1408/rn-background-geolocation.git",
+    "name": "@mauron85/react-native-background-geolocation",
+    "escapedName": "@mauron85%2freact-native-background-geolocation",
+    "scope": "@mauron85",
+    "rawSpec": "git+https://github.com/xuanloi1408/rn-background-geolocation.git",
+    "saveSpec": "git+https://github.com/xuanloi1408/rn-background-geolocation.git",
+    "fetchSpec": "https://github.com/xuanloi1408/rn-background-geolocation.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/xuanloi1408/rn-background-geolocation.git#6836156b5f9da98f91419e1408d172db09bf6c75",
+  "_spec": "@mauron85/react-native-background-geolocation@git+https://github.com/xuanloi1408/rn-background-geolocation.git",
+  "_where": "/Users/caoloi/Workspaces/Winaked/dopz.rn-app",
+  "author": {
+    "name": "Marian Hello"
+  },
+  "bugs": {
+    "url": "https://github.com/mauron85/react-native-background-geolocation/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "plist": "^3.0.1"
+  },
+  "deprecated": false,
+  "description": "optimized background location tracking",
+  "homepage": "https://github.com/mauron85/react-native-background-geolocation#readme",
+  "keywords": [
+    "gps",
+    "geolocation",
+    "position",
+    "location",
+    "tracking",
+    "background",
+    "react",
+    "react-native",
+    "react-component",
+    "android",
+    "ios"
+  ],
+  "license": "Apache-2.0",
+  "main": "./index.js",
+  "name": "@mauron85/react-native-background-geolocation",
+  "peerDependencies": {
+    "react-native": ">=0.60.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mauron85/react-native-background-geolocation.git"
+  },
+  "scripts": {
+    "link": "@mauron85/react-native-background-geolocation/scripts/postlink.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "unlink": "@mauron85/react-native-background-geolocation/scripts/postunlink.js"
+  },
+  "types": "./index.d.ts",
+  "version": "0.6.3"
+}
