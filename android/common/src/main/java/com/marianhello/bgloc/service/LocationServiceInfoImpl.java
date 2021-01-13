@@ -30,7 +30,9 @@ public class LocationServiceInfoImpl implements LocationServiceInfo {
 
     public ActivityManager.RunningServiceInfo getRunningServiceInfo() {
         String serviceName = LocationServiceImpl.class.getName();
+
         ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+
         for (ActivityManager.RunningServiceInfo info : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceName.equals(info.service.getClassName())) {
                 return info;

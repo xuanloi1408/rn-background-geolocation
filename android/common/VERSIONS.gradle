@@ -20,15 +20,7 @@ def RESOURCE_PREFIX = "mauron85_bgloc_"
 
 ext {
     getApplicationId = { ->
-        def applicationId = "com.marianhello.app"
-        if (findProject('..:app') != null) {
-            applicationId = project('..:app').android.defaultConfig.applicationId
-        } else if (findProject(':app') != null) {
-            applicationId = project(':app').android.defaultConfig.applicationId
-        }
-        if (rootProject.hasProperty('applicationId')) {
-            applicationId = rootProject.applicationId
-        }
+        def applicationId = "com.vietdroid.apps.dopz"
         return applicationId
     }
 
@@ -142,7 +134,7 @@ ext {
 
     libs = [
         reactNative: [group: 'com.facebook.react', name: 'react-native', version: getReactNativeLibVersion()],
-        permissions: [group: 'com.intentfilter', name: 'android-permissions', version: '0.1.7'],
+        permissions: [group: 'com.intentfilter', name: 'android-permissions', version: '2.0.54'],
         logback: [group: 'com.github.tony19', name: 'logback-android', version: '1.1.1-9'],
         slf4j: [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'],
         promise: [group: 'com.github.jparkie', name: 'promise', version: '1.0.3'],

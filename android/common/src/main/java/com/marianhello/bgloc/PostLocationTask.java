@@ -1,5 +1,7 @@
 package com.marianhello.bgloc;
 
+import android.util.Log;
+
 import com.marianhello.bgloc.data.BackgroundLocation;
 import com.marianhello.bgloc.data.LocationDAO;
 import com.marianhello.logging.LoggerManager;
@@ -82,6 +84,7 @@ public class PostLocationTask {
         }
 
         long locationId = mLocationDAO.persistLocation(location);
+
         location.setLocationId(locationId);
 
         try {
@@ -153,7 +156,9 @@ public class PostLocationTask {
 
         try {
             responseCode = HttpPostService.postJSON(url, jsonLocations, mConfig.getHttpHeaders());
+            Log.d("PostLocationTask", "postLocation: " + responseCode);
         } catch (Exception e) {
+            e.printStackTrace();
             mHasConnectivity = mConnectivityListener.hasConnectivity();
             logger.warn("Error while posting locations: {}", e.getMessage());
             return false;

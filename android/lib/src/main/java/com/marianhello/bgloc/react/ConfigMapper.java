@@ -61,7 +61,7 @@ public class ConfigMapper {
         if (options.hasKey("syncUrl")) config.setSyncUrl(
                 !options.isNull("syncUrl") ? options.getString("syncUrl") : Config.NullString
         );
-        if (options.hasKey("syncThreshold")) config.setSyncThreshold(options.getInt("syncThreshold"));
+        if (options.hasKey("syncThreshold")) config.setSyncThreshold(Integer.valueOf(options.getString("syncThreshold")));
         if (options.hasKey("httpHeaders")) {
             HashMap httpHeaders = new HashMap<String, String>();
             ReadableType type = options.getType("httpHeaders");

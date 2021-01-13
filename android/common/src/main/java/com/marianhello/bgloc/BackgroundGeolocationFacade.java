@@ -16,11 +16,13 @@ import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.github.jparkie.promise.Promise;
 import com.intentfilter.androidpermissions.PermissionManager;
+import com.intentfilter.androidpermissions.models.DeniedPermissions;
 import com.marianhello.bgloc.data.BackgroundActivity;
 import com.marianhello.bgloc.data.BackgroundLocation;
 import com.marianhello.bgloc.data.ConfigurationDAO;
@@ -57,6 +59,14 @@ public class BackgroundGeolocationFacade {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static final String[] PERMISSIONS_Q = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+    };
+
 
     private boolean mServiceBroadcastReceiverRegistered = false;
     private boolean mLocationModeChangeReceiverRegistered = false;
@@ -216,6 +226,12 @@ public class BackgroundGeolocationFacade {
         logger.debug("Starting service");
 
         PermissionManager permissionManager = PermissionManager.getInstance(getContext());
+
+        String[] permissions = PERMISSIONS;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissions = PERMISSIONS_Q;
+        }
+
         permissionManager.checkPermissions(Arrays.asList(PERMISSIONS), new PermissionManager.PermissionRequestListener() {
             @Override
             public void onPermissionGranted() {
@@ -227,7 +243,7 @@ public class BackgroundGeolocationFacade {
             }
 
             @Override
-            public void onPermissionDenied() {
+            public void onPermissionDenied(DeniedPermissions var1) {
                 logger.info("User denied requested permissions");
                 if (mDelegate != null) {
                     mDelegate.onAuthorizationChanged(BackgroundGeolocationFacade.AUTHORIZATION_DENIED);
