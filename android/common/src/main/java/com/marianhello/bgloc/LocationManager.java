@@ -6,17 +6,24 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.github.jparkie.promise.Promise;
 import com.github.jparkie.promise.Promises;
 import com.intentfilter.androidpermissions.PermissionManager;
+import com.intentfilter.androidpermissions.models.DeniedPermissions;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+
 
 public class LocationManager {
     private Context mContext;
@@ -24,7 +31,14 @@ public class LocationManager {
 
     public static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static final String[] PERMISSIONS_Q = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
     };
 
     private LocationManager(Context context) {
@@ -42,9 +56,14 @@ public class LocationManager {
 
     public Promise<Location> getCurrentLocation(final int timeout, final long maximumAge, final boolean enableHighAccuracy) {
         final Promise<Location> promise = Promises.promise();
-
         PermissionManager permissionManager = PermissionManager.getInstance(mContext);
-        permissionManager.checkPermissions(Arrays.asList(PERMISSIONS), new PermissionManager.PermissionRequestListener() {
+
+        String[] permissions = PERMISSIONS;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissions = PERMISSIONS_Q;
+        }
+
+        permissionManager.checkPermissions(Arrays.asList(permissions), new PermissionManager.PermissionRequestListener() {
             @Override
             public void onPermissionGranted() {
                 try {
@@ -58,7 +77,7 @@ public class LocationManager {
             }
 
             @Override
-            public void onPermissionDenied() {
+            public void onPermissionDenied(DeniedPermissions var1) {
                 promise.setError(new PermissionDeniedException());
             }
         });
@@ -79,16 +98,18 @@ public class LocationManager {
     @SuppressLint("MissingPermission")
     public Location getCurrentLocationNoCheck(int timeout, long maximumAge, boolean enableHighAccuracy) throws InterruptedException, TimeoutException {
         final long minLocationTime = System.currentTimeMillis() - maximumAge;
-        final android.location.LocationManager locationManager = (android.location.LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
-        Location lastKnownGPSLocation = locationManager.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
-        if (lastKnownGPSLocation != null && lastKnownGPSLocation.getTime() >= minLocationTime) {
-            return lastKnownGPSLocation;
-        }
+        final android.location.LocationManager locationManager =
+                (android.location.LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         Location lastKnownNetworkLocation = locationManager.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER);
         if (lastKnownNetworkLocation != null && lastKnownNetworkLocation.getTime() >= minLocationTime) {
             return lastKnownNetworkLocation;
+        }
+
+        Location lastKnownGPSLocation = locationManager.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
+        if (lastKnownGPSLocation != null && lastKnownGPSLocation.getTime() >= minLocationTime) {
+            return lastKnownGPSLocation;
         }
 
         Criteria criteria = new Criteria();
@@ -105,7 +126,6 @@ public class LocationManager {
         if (locationListener.mLocation != null) {
             return locationListener.mLocation;
         }
-
         return null;
     }
 
@@ -117,6 +137,7 @@ public class LocationManager {
         public void onLocationChanged(Location location) {
             mLocation = location;
             mCountDownLatch.countDown();
+            Log.d("CurrentLocation", "onLocationChanged: " + mLocation);
         }
 
         @Override

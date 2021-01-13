@@ -184,7 +184,9 @@ public class LocationServiceImpl extends Service implements ProviderDelegate, Lo
         if (mHandlerThread == null) {
             mHandlerThread = new HandlerThread("LocationServiceImpl.Thread", Process.THREAD_PRIORITY_BACKGROUND);
         }
+
         mHandlerThread.start();
+
         // An Android service handler is a handler running on a specific background thread.
         mServiceHandler = new ServiceHandler(mHandlerThread.getLooper());
 
@@ -223,6 +225,7 @@ public class LocationServiceImpl extends Service implements ProviderDelegate, Lo
         });
 
         registerReceiver(connectivityChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
         NotificationHelper.registerServiceChannel(this);
     }
 
